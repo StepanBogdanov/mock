@@ -33,3 +33,7 @@ spring:
         producer:
           use-native-encoding: true
 
+logging:
+  level.root: ERROR
+  file.name: logs/mock.log
+

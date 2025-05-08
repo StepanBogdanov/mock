@@ -3,6 +3,7 @@ package com.example.mock.service;
 import com.example.mock.model.RequestDto;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.Bean;
 import org.springframework.stereotype.Service;
 
@@ -10,6 +11,7 @@ import java.util.function.Consumer;
 
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class ConsumerService {
 
     private final SupplierService supplierService;
@@ -24,6 +26,8 @@ public class ConsumerService {
     @Bean
     public Consumer<RequestDto> readRequest() {
         return message -> {
+            log.debug("Вызов метода ConsumerService.readRequest с запросом: Action = {}, Body = {}",
+                    message.getAction(), message.getBody());
             switch (message.getAction()) {
                 case REGISTER -> {
                     try {
