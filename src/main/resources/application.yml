@@ -1,0 +1,35 @@
+spring:
+  application:
+    name: mock
+  cloud:
+    definition: readRequest, registerUser, handleRequest, deleteUser
+  stream:
+    kafka:
+      binder:
+        brokers: ${KAFKA_HOST:127.0.0.1}:${KAFKA_PORT:29092}
+        consumer-properties:
+          value.deserializer: com.example.mock.util.RequestDtoDeserializer
+        producer-properties:
+          value.serializer: com.example.mock.util.ResponseDtoSerializer
+    bindings:
+      readRequest-in-0:
+        group: my-group
+        destination: requestTopic
+        consumer:
+          use-native-decoding: true
+      registerUser-out-0:
+        group: my-group
+        destination: responseTopic
+        producer:
+          use-native-encoding: true
+      handleRequest-out-0:
+        group: my-group
+        destination: responseTopic
+        producer:
+          use-native-encoding: true
+      deleteUser-out-0:
+        group: my-group
+        destination: responseTopic
+        producer:
+          use-native-encoding: true
+
