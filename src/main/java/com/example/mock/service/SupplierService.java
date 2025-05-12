@@ -23,16 +23,16 @@ public class SupplierService {
         String response;
         if (login.isBlank()) {
             response = "В запрос на регистрацию передан пустой логин";
-            log.info(response);
+            log.warn(response);
         } else if (login.length() < 5) {
             response = "Логин не может быть меньше пяти символов: " + login;
-            log.info(response);
+            log.warn(response);
         } else if (password.isBlank()) {
             response = "В запросе на регистрацию передан пустой пароль";
-            log.info(response);
+            log.warn(response);
         } else if (!password.matches("^[a-zA-Z0-9]{8,}$")) {
             response = "Пароль должен содержать только латинские буквы и цифры и не должен быть короче 8 символов: " + password;
-            log.info(response);
+            log.warn(response);
         } else {
             response = userService.registerUser(login, password);
         }
@@ -52,7 +52,7 @@ public class SupplierService {
         if (firstName.isBlank() || lastName.isBlank() || middleName.isBlank()) {
             response = String.format("В запросе переданы пустое имя: %s, фамилия: %s или отчество: %s",
                     firstName, lastName, middleName);
-            log.info(response);
+            log.warn(response);
         } else {
             response = userService.handleRequest(firstName, lastName, middleName);
         }
@@ -68,10 +68,10 @@ public class SupplierService {
         String response;
         if (login.isBlank()) {
             response = "В запрос на удаление передан пустой логин";
-            log.info(response);
+            log.warn(response);
         } else if (login.length() < 5) {
             response = "Логин не может быть меньше пяти символов: " + login;
-            log.info(response);
+            log.warn(response);
         } else {
             response = userService.deleteUser(login);
         }

@@ -37,3 +37,8 @@ logging:
   level.root: INFO
   file.name: logs/mock.log
 
+management:
+  endpoints.web.exposure.include: health, prometheus
+  endpoint.health.show.details: always
+  tracing.sampling.probability: 1
+
