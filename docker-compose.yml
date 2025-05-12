@@ -33,3 +33,72 @@ services:
       DYNAMIC_CONFIG_ENABLED: 'true'
     depends_on:
       - kafka
+
+  kafka-exporter:
+    container_name: kafka-exporter
+    image: danielqsj/kafka-exporter
+    command: ["--kafka.server=kafka:29092"]
+    ports:
+      - 9308:9308
+    depends_on:
+      - kafka
+
+  node-exporter:
+    container_name: node-exporter
+    image: prom/node-exporter:latest
+    restart: unless-stopped
+    volumes:
+      - /proc:/host/proc:ro
+      - /sys:/host/sys:ro
+      - /:/rootfs:ro
+    command:
+      - '--path.procfs=/host/proc'
+      - '--path.rootfs=/rootfs'
+      - '--path.sysfs=/host/sys'
+      - '--collector.filesystem.mount-points-exclude=^/(sys|proc|dev|host|etc)($$|/)'
+    ports:
+      - 9100:9100
+
+  prometheus:
+    image: prom/prometheus:latest
+    container_name: prometheus
+    restart: always
+    volumes:
+      - ./prometheus.yml:/etc/prometheus/prometheus.yml:ro
+      - prometheus_data:/prometheus
+    command:
+      - '--config.file=/etc/prometheus/prometheus.yml'
+      - '--storage.tsdb.path=/prometheus'
+      - '--web.console.libraries=/etc/prometheus/console_libraries'
+      - '--web.console.templates=/etc/prometheus/consoles'
+      - '--web.enable-lifecycle'
+    ports:
+      - 9090:9090
+
+  grafana:
+    container_name: grafana_2
+    image: grafana/grafana
+    environment:
+      - GF_SECURITY_ADMIN_USER=admin
+      - GF_SECURITY_ADMIN_PASSWORD=admin
+    ports:
+      - 3000:3000
+    volumes:
+      - ./grafana:/var/lib/grafana
+      - ./grafana/provisioning/:/etc/grafana/provisioning/
+      - ./grafana/dashboards/:/var/lib/grafana/dashboards/ # https://grafana.com/grafana/dashboards/1860
+    depends_on:
+      - prometheus
+
+  mock:
+    container_name: mock
+    build: .
+    environment:
+      KAFKA_HOST: kafka
+      KAFKA_PORT: 29092
+    ports:
+      - 8084:8084
+
+volumes:
+  prometheus_data: {}
+  grafana_prom_data: {}
