@@ -23,7 +23,7 @@ public class SupplierService {
                 Action.REGISTER,
                 response
         ));
-        log.debug("Запрос на регистрацию пользователя с логином {} обработан, ответ: {}",
+        log.info("Запрос на регистрацию пользователя с логином {} обработан, ответ: {}",
                 body.get("login"), response);
     }
 
@@ -33,7 +33,7 @@ public class SupplierService {
                 Action.REQUEST,
                 response
         ));
-        log.debug("Запрос {} обработан, ответ: {}", body, response);
+        log.info("Запрос {} обработан, ответ: {}", body, response);
     }
 
     public void deleteUser(HashMap<String, String> body) {
@@ -42,7 +42,7 @@ public class SupplierService {
                 Action.DELETE,
                 response
         ));
-        log.debug("Запрос на удаление пользователя с логином {} обработан, ответ: {}",
+        log.info("Запрос на удаление пользователя с логином {} обработан, ответ: {}",
                 body.get("login"), response);
     }
 }

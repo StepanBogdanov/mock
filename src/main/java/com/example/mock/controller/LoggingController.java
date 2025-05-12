@@ -25,7 +25,7 @@ public class LoggingController {
         }
     }
 
-    @PostMapping("/debug")
+    @PostMapping("/error")
     public ResponseEntity<String> setErrorLevel() {
         try {
             loggingSystem.setLogLevel("ROOT", LogLevel.ERROR);

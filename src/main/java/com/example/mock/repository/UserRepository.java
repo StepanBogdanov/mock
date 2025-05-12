@@ -9,7 +9,7 @@ import java.util.UUID;
 @Repository
 public class UserRepository {
 
-    private HashMap<String, User> users;
+    private HashMap<String, User> users = new HashMap<>();
 
     public String registerUser(String login, String password) {
         if (users.containsKey(login)) {

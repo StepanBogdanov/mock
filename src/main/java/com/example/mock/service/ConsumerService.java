@@ -26,7 +26,7 @@ public class ConsumerService {
     @Bean
     public Consumer<RequestDto> readRequest() {
         return message -> {
-            log.debug("Вызов метода ConsumerService.readRequest с запросом: Action = {}, Body = {}",
+            log.info("Вызов метода ConsumerService.readRequest с запросом: Action = {}, Body = {}",
                     message.getAction(), message.getBody());
             switch (message.getAction()) {
                 case REGISTER -> {
