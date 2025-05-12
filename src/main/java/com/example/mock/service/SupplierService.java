@@ -18,7 +18,24 @@ public class SupplierService {
     private final StreamBridge streamBridge;
 
     public void registerUser(HashMap<String, String> body) {
-        String response = userService.registerUser(body.get("login"), body.get("password"));
+        String login = body.get("login");
+        String password = body.get("password");
+        String response;
+        if (login.isBlank()) {
+            response = "В запрос на регистрацию передан пустой логин";
+            log.info(response);
+        } else if (login.length() < 5) {
+            response = "Логин не может быть меньше пяти символов: " + login;
+            log.info(response);
+        } else if (password.isBlank()) {
+            response = "В запросе на регистрацию передан пустой пароль";
+            log.info(response);
+        } else if (!password.matches("^[a-zA-Z0-9]{8,}$")) {
+            response = "Пароль должен содержать только латинские буквы и цифры и не должен быть короче 8 символов: " + password;
+            log.info(response);
+        } else {
+            response = userService.registerUser(login, password);
+        }
         streamBridge.send("registerUser-out-0", new ResponseDto(
                 Action.REGISTER,
                 response
@@ -28,7 +45,17 @@ public class SupplierService {
     }
 
     public void handleRequest(HashMap<String, String> body) {
-        String response = userService.handleRequest(body.get("firstName"), body.get("lastName"), body.get("middleName"));
+        String firstName = body.get("firstName");
+        String lastName = body.get("lastName");
+        String middleName = body.get("middleName");
+        String response;
+        if (firstName.isBlank() || lastName.isBlank() || middleName.isBlank()) {
+            response = String.format("В запросе переданы пустое имя: %s, фамилия: %s или отчество: %s",
+                    firstName, lastName, middleName);
+            log.info(response);
+        } else {
+            response = userService.handleRequest(firstName, lastName, middleName);
+        }
         streamBridge.send("handleRequest-out-0", new ResponseDto(
                 Action.REQUEST,
                 response
@@ -37,7 +64,17 @@ public class SupplierService {
     }
 
     public void deleteUser(HashMap<String, String> body) {
-        String response = userService.deleteUser(body.get("login"));
+        String login = body.get("login");
+        String response;
+        if (login.isBlank()) {
+            response = "В запрос на удаление передан пустой логин";
+            log.info(response);
+        } else if (login.length() < 5) {
+            response = "Логин не может быть меньше пяти символов: " + login;
+            log.info(response);
+        } else {
+            response = userService.deleteUser(login);
+        }
         streamBridge.send("deleteUser-out-0", new ResponseDto(
                 Action.DELETE,
                 response
