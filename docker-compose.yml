@@ -99,6 +99,12 @@ services:
     ports:
       - 8084:8084
 
+  maven:
+    image: maven:3.8.4-openjdk-17
+    volumes:
+      - .:/app
+    working_dir: /app
+
 volumes:
   prometheus_data: {}
   grafana_prom_data: {}

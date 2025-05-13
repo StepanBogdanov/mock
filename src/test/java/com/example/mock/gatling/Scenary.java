@@ -12,7 +12,6 @@ import org.apache.kafka.clients.producer.KafkaProducer;
 import org.apache.kafka.clients.producer.ProducerRecord;
 import org.apache.kafka.common.serialization.StringSerializer;
 
-import java.time.Duration;
 import java.util.*;
 
 import static io.gatling.javaapi.core.CoreDsl.*;
@@ -26,7 +25,8 @@ public class Scenary extends Simulation {
 
     public Scenary() {
         Properties producerProps = new Properties();
-        producerProps.put("bootstrap.servers", "localhost:9092");
+//        producerProps.put("bootstrap.servers", "localhost:9092");
+        producerProps.put("bootstrap.servers", "kafka:29092");
         producerProps.put("key.serializer", StringSerializer.class.getName());
         producerProps.put("value.serializer", StringSerializer.class.getName());
         kafkaProducer = new KafkaProducer<>(producerProps);
